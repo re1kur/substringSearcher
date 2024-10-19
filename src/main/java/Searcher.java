@@ -2,14 +2,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Searcher class
+ */
 public class Searcher {
-    private static Logger logger = Logger.getLogger(Searcher.class.getName());
+    private static final Logger logger = Logger.getLogger(Searcher.class.getName());
+
+    /**
+     * @param string        value to parse
+     * @param subStrings    list of substrings
+     * @param caseSensitive boolean value of case-sensitive
+     * @param count         required count of founded matches
+     * @param reverse       boolean value
+     * @return List<Integer> indexes in content of matches
+     */
     @LogExecutionTime
     public List<Integer> search(String string, List<String> subStrings, boolean caseSensitive, int count, boolean reverse) {
         long startTime = System.currentTimeMillis();
         List<Integer> results = new ArrayList<>();
-
-        // Если нечувствительность к регистру - делаем все строки нижним регистром
         if (!caseSensitive) {
             string = string.toLowerCase();
             List<String> lowerSubStrings = new ArrayList<>();
@@ -18,8 +28,6 @@ public class Searcher {
             }
             subStrings = lowerSubStrings;
         }
-
-        // Для каждой подстроки делаем поиск
         for (String subString : subStrings) {
             if (reverse) {
                 results.addAll(reverseKmpSearch(string, subString, count));  // Используем обратный поиск
@@ -32,24 +40,26 @@ public class Searcher {
         return results;
     }
 
-    // Основной метод КМП для прямого поиска одной подстроки
+    /**
+     * @param string    content value to parse
+     * @param subString substring
+     * @param count     required count of founded matches
+     * @return List<Integer> indexes
+     */
     private static List<Integer> kmpSearch(String string, String subString, int count) {
         List<Integer> result = new ArrayList<>();
         int[] lps = computeLPSArray(subString);
         int i = 0;  // Индекс строки
         int j = 0;  // Индекс подстроки
-
         if (subString.isEmpty()) return result;
-
         while (i < string.length()) {
             if (subString.charAt(j) == string.charAt(i)) {
                 i++;
                 j++;
             }
-
             if (j == subString.length()) {
-                result.add(i - j);  // Нашли совпадение
-                j = lps[j - 1];     // Используем LPS для продолжения поиска
+                result.add(i - j);
+                j = lps[j - 1];
                 if (count > 0 && result.size() == count) {
                     break;
                 }
@@ -61,26 +71,31 @@ public class Searcher {
                 }
             }
         }
-
         return result;
     }
 
-    // Метод для обратного поиска (реверсируем строку и подстроку)
+    /**
+     * @param string    value
+     * @param subString substring
+     * @param count     required count of founded matches
+     */
     private List<Integer> reverseKmpSearch(String string, String subString, int count) {
         String reversedString = new StringBuilder(string).reverse().toString();
         String reversedSubString = new StringBuilder(subString).reverse().toString();
         List<Integer> reversedResults = kmpSearch(reversedString, reversedSubString, count);
-
-        // Преобразуем результаты поиска в исходной строке
         List<Integer> result = new ArrayList<>();
         for (int index : reversedResults) {
             result.add(string.length() - index - subString.length());  // Преобразуем индекс для оригинальной строки
         }
-
         return result;
     }
 
-    // Префикс-функция (LPS)
+    /**
+     * method for creating prefix-functions of content which must parsed
+     *
+     * @param pat content to parse
+     * @return int[] LPS prefix-function
+     */
     private static int[] computeLPSArray(String pat) {
         int[] lps = new int[pat.length()];
         int length = 0;

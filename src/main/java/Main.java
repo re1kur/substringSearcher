@@ -1,24 +1,32 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Main {
-
-    // Логгер для информации
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-    // Метод для поиска подстроки в содержимом файла
+    /**
+     * @param content       content to parse
+     * @param subStrings    list of substrings
+     * @param caseSensitive boolean value of case-sensitive
+     * @param count         required count of founded matches
+     * @param fromEnd       boolean value of reverse
+     * @return List<Integer>
+     */
     public List<Integer> findSubstrings(String content, List<String> subStrings, boolean caseSensitive, int count, boolean fromEnd) {
         Searcher searcher = new Searcher();
         return searcher.search(content, subStrings, caseSensitive, count, fromEnd);
     }
 
-    // Метод для чтения содержимого файла
+    /**
+     * @param filePath String path to file
+     * @return content of file
+     * @throws IOException if file don't exist
+     */
     public static String readFile(String filePath) throws IOException {
         StringBuilder content = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -30,6 +38,12 @@ public class Main {
         return content.toString();
     }
 
+    /**
+     * @param string    content to parse
+     * @param positions int[] of indexes of substrings
+     * @param subString substring
+     * @param reversed  boolean value. True or false
+     */
     public static void printColoredResults(String string, List<Integer> positions, String subString, boolean reversed) {
         if (reversed) positions = positions.reversed();
         StringBuilder result = new StringBuilder();
