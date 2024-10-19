@@ -1,13 +1,10 @@
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
-
-    public static Logger logger = Logger.getLogger(MainTest.class.getName());
 
     @Test
     public void testFindSubstrings_emptyString() {

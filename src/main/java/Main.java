@@ -3,7 +3,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Main {
@@ -45,7 +44,7 @@ public class Main {
      * @param reversed  boolean value. True or false
      */
     public static void printColoredResults(String string, List<Integer> positions, String subString, boolean reversed) {
-        if (reversed) positions = positions.reversed();
+        if (reversed) positions = positions.stream().sorted((a, b) -> b - a).toList(); // Sorting in reverse order if needed
         StringBuilder result = new StringBuilder();
         int lastIndex = 0;
         try {
@@ -63,28 +62,25 @@ public class Main {
         System.out.println(result);
     }
 
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Main mainObj = new Main();
+        if (args.length < 5) {
+            System.out.println("Usage: java Main <file_path> <substrings> <case_sensitive> <count> <from_end>");
+            System.out.println("<file_path> - path to the file");
+            System.out.println("<substrings> - comma separated substrings to search");
+            System.out.println("<case_sensitive> - 0 for case-sensitive, 1 for not case-insensitive");
+            System.out.println("<count> - number of occurrences to find (0 for no limit)");
+            System.out.println("<from_end> - 0 for search from start, 1 for search from end");
+            return;
+        }
 
-        // Ввод данных пользователем
-        System.out.println("Enter the file path:");
-        String filePath = scanner.nextLine();
-
-        System.out.println("Enter the substring or substrings separated by commas to search for:");
-        String subString = scanner.nextLine();
-        List<String> subStrings = Arrays.asList(subString.split("\\s*,\\s*"));
-
-        System.out.println("Case sensitive? (0=yes/1=no):");
-        boolean caseSensitive = scanner.nextLine().equalsIgnoreCase("0");
-
-        System.out.println("Number of occurrences to find (enter 0 for no limit):");
-        int count = Integer.parseInt(scanner.nextLine());
+        String filePath = args[0];
+        List<String> subStrings = Arrays.asList(args[1].split("\\s*,\\s*"));
+        boolean caseSensitive = args[2].equals("0");
+        int count = Integer.parseInt(args[3]);
         if (count == 0) count = Integer.MAX_VALUE;
+        boolean fromEnd = args[4].equals("1");
 
-        System.out.println("Search from the beginning? (0=yes/1=no):");
-        boolean fromEnd = scanner.nextLine().equalsIgnoreCase("1");
+        Main mainObj = new Main();
 
         try {
             // Чтение файла и поиск подстроки
@@ -93,7 +89,7 @@ public class Main {
             // Вызов метода для поиска подстрок
             List<Integer> result = mainObj.findSubstrings(content, subStrings, caseSensitive, count, fromEnd);
             logger.info("Result: " + result.toString());
-            printColoredResults(content, result, subString, fromEnd);
+            printColoredResults(content, result, subStrings.get(0), fromEnd); // Assuming first substring for coloring
         } catch (IOException e) {
             logger.severe("Error reading file: " + e.getMessage());
         }

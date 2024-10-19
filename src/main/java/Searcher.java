@@ -18,7 +18,7 @@ public class Searcher {
      */
     @LogExecutionTime
     public List<Integer> search(String string, List<String> subStrings, boolean caseSensitive, int count, boolean reverse) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime() / 10000;
         List<Integer> results = new ArrayList<>();
         if (!caseSensitive) {
             string = string.toLowerCase();
@@ -35,7 +35,7 @@ public class Searcher {
                 results.addAll(kmpSearch(string, subString, count));  // Прямой поиск
             }
         }
-        long executionTime = System.currentTimeMillis() - startTime;  // Конец замера времени
+        long executionTime = System.nanoTime() / 10000 - startTime;  // Конец замера времени
         logger.info("Method search executed in " + executionTime + " ms");
         return results;
     }
