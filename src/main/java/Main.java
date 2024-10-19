@@ -14,7 +14,8 @@ public class Main {
 
     // Метод для поиска подстроки в содержимом файла
     public List<Integer> findSubstrings(String content, List<String> subStrings, boolean caseSensitive, int count, boolean fromEnd) {
-        return Searcher.search(content, subStrings, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        return searcher.search(content, subStrings, caseSensitive, count, fromEnd);
     }
 
     // Метод для чтения содержимого файла
@@ -29,7 +30,8 @@ public class Main {
         return content.toString();
     }
 
-    public static void printColoredResults(String string, List<Integer> positions, String subString) {
+    public static void printColoredResults(String string, List<Integer> positions, String subString, boolean reversed) {
+        if (reversed) positions = positions.reversed();
         StringBuilder result = new StringBuilder();
         int lastIndex = 0;
         try {
@@ -60,15 +62,15 @@ public class Main {
         String subString = scanner.nextLine();
         List<String> subStrings = Arrays.asList(subString.split("\\s*,\\s*"));
 
-        System.out.println("Case sensitive? (yes/no):");
-        boolean caseSensitive = scanner.nextLine().equalsIgnoreCase("yes");
+        System.out.println("Case sensitive? (0=yes/1=no):");
+        boolean caseSensitive = scanner.nextLine().equalsIgnoreCase("0");
 
         System.out.println("Number of occurrences to find (enter 0 for no limit):");
         int count = Integer.parseInt(scanner.nextLine());
         if (count == 0) count = Integer.MAX_VALUE;
 
-        System.out.println("Search from the end? (yes/no):");
-        boolean fromEnd = scanner.nextLine().equalsIgnoreCase("yes");
+        System.out.println("Search from the beginning? (0=yes/1=no):");
+        boolean fromEnd = scanner.nextLine().equalsIgnoreCase("1");
 
         try {
             // Чтение файла и поиск подстроки
@@ -77,7 +79,7 @@ public class Main {
             // Вызов метода для поиска подстрок
             List<Integer> result = mainObj.findSubstrings(content, subStrings, caseSensitive, count, fromEnd);
             logger.info("Result: " + result.toString());
-            printColoredResults(content, result, subString);
+            printColoredResults(content, result, subString, fromEnd);
         } catch (IOException e) {
             logger.severe("Error reading file: " + e.getMessage());
         }

@@ -18,7 +18,8 @@ public class MainTest {
         int count = 3;
         boolean fromEnd = false;
 
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertTrue(result.isEmpty(), "Поиск в пустой строке должен возвращать пустой список.");
     }
 
@@ -31,7 +32,8 @@ public class MainTest {
         int count = 3;
         boolean fromEnd = false;
 
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertTrue(result.isEmpty(), "Поиск пустой подстроки должен возвращать пустой список.");
     }
 
@@ -44,7 +46,8 @@ public class MainTest {
         int count = 3;
         boolean fromEnd = false;
 
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertTrue(result.isEmpty(), "Подстрока 'f' не должна быть найдена в строке 'abcde'.");
     }
 
@@ -58,7 +61,8 @@ public class MainTest {
         boolean fromEnd = false;
 
         List<Integer> expected = List.of(0, 1, 2);  // Ожидаем три первых совпадения
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertEquals(expected, result, "Три первых 'a' должны быть найдены в строке 'aaaa'.");
     }
 
@@ -72,7 +76,8 @@ public class MainTest {
         boolean fromEnd = false;
 
         List<Integer> expected = List.of(2, 5);  // Ожидаем два первых совпадения
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertEquals(expected, result, "Два первых 'abc' должны быть найдены на позициях 2 и 5.");
     }
 
@@ -86,7 +91,8 @@ public class MainTest {
         boolean fromEnd = false;
 
         List<Integer> expected = List.of(0, 5);
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertEquals(expected, result, "Нечувствительный поиск 'abc' должен вернуть позиции 0 и 5.");
     }
 
@@ -100,7 +106,8 @@ public class MainTest {
         boolean fromEnd = true;  // Ищем с конца
 
         List<Integer> expected = List.of(6, 3);  // Два последних совпадения
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertEquals(expected, result, "Два последних 'abc' должны быть найдены на позициях 6 и 3.");
     }
 
@@ -114,7 +121,8 @@ public class MainTest {
         boolean fromEnd = false;
 
         List<Integer> expected = List.of(0);  // Полное совпадение
-        List<Integer> result = Searcher.search(content, subString, caseSensitive, count, fromEnd);
+        Searcher searcher = new Searcher();
+        List<Integer> result = searcher.search(content, subString, caseSensitive, count, fromEnd);
         assertEquals(expected, result, "Полное совпадение подстроки должно вернуть позицию 0.");
     }
 }
